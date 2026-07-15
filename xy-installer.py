@@ -91,6 +91,8 @@ NETOPT_LOCAL = BGP_DIR + "/net-optimize-ultimate.sh"  # 本地缓存的网络优
 NETOPT_URL   = _VPSNET_RAW + "net-optimize-ultimate.sh"
 TOOLS_LOCAL  = BGP_DIR + "/setup-tools.sh"            # VPS 适用工具（网优前建议先装）
 TOOLS_URL    = _VPSNET_RAW + "setup-tools.sh"
+NETCHK_LOCAL = BGP_DIR + "/net-optimize-check.sh"     # 一键检测当前网络优化状态
+NETCHK_URL   = _VPSNET_RAW + "net-optimize-check.sh"
 
 # 内核（sing-box/xray）每月自动更新：cron 每月北京时间 2 号 04:00 调 `update-cores`。
 SELF_LOCAL     = BGP_DIR + "/xy-installer.py"    # 本地脚本副本（cron 调它，不受网络影响）
@@ -2433,6 +2435,7 @@ def net_optimize_menu():
         print("  2 自适应智能算法+抢占带宽（默认 20MB/s 激活、阈值可调，适合内存 2G 左右机器）")
         print("  3 固定 cake 纯智能算法（不切换，适合高性能机器）")
         print("  4 安装 VPS 适用工具（setup-tools，网优前建议先装）")
+        print("  5 网络优化状况（一键检测当前优化状态）")
         print("  0 返回")
         c = _ask("选择: ").strip()
         if c == "1":
@@ -2450,6 +2453,10 @@ def net_optimize_menu():
             if not ensure_remote_script(TOOLS_URL, TOOLS_LOCAL):
                 print("拉取 setup-tools.sh 失败，且本地无缓存。请检查网络。"); continue
             subprocess.run(f"bash {TOOLS_LOCAL}", shell=True)
+        elif c == "5":
+            if not ensure_remote_script(NETCHK_URL, NETCHK_LOCAL):
+                print("拉取 net-optimize-check.sh 失败，且本地无缓存。请检查网络。"); continue
+            subprocess.run(f"bash {NETCHK_LOCAL}", shell=True)
         elif c in ("0", ""):
             return
 
